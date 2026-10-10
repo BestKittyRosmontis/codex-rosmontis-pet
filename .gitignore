@@ -1,6 +1,6 @@
-node_modules/
-dist/
-package-files.json
+/node_modules/
+/dist/
+/package-files.json
 .env
 .env.*
 *.log

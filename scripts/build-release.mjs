@@ -51,6 +51,7 @@ for (const relative of tracked) {
 const electronDist = path.join(runtimeDir, 'electron', 'dist');
 walk(electronDist);
 fs.cpSync(electronDist, path.join(stage, 'node_modules/electron/dist'), { recursive: true });
+execFileSync(process.execPath, [path.join(stage, 'scripts/validate-package.mjs')], { cwd: stage, stdio: 'inherit', windowsHide: true });
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex').toUpperCase();
 const files = walk(stage).map(full => ({
   path: path.relative(stage, full).split(path.sep).join('/'),
@@ -59,7 +60,7 @@ const files = walk(stage).map(full => ({
 fs.writeFileSync(path.join(stage, 'package-files.json'), JSON.stringify({ files }, null, 2) + '\n');
 const zip = path.join(outDir, `${bundleName}.zip`);
 const quotePS = value => `'${value.replaceAll("'", "''")}'`;
-const ps = `Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::CreateFromDirectory(${quotePS(stage)}, ${quotePS(zip)}, [IO.Compression.CompressionLevel]::Optimal, $true)`;
+const ps = `$ProgressPreference = 'SilentlyContinue'; Add-Type -AssemblyName System.IO.Compression.FileSystem; [IO.Compression.ZipFile]::CreateFromDirectory(${quotePS(stage)}, ${quotePS(zip)}, [IO.Compression.CompressionLevel]::Optimal, $true)`;
 execFileSync('powershell.exe', ['-NoProfile', '-EncodedCommand', Buffer.from(ps, 'utf16le').toString('base64')], { stdio: 'inherit', windowsHide: true });
 const checksum = sha256(fs.readFileSync(zip));
 fs.writeFileSync(zip + '.sha256', `${checksum}  ${path.basename(zip)}\n`);
