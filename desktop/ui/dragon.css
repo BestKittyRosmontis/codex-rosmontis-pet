@@ -1,0 +1,27 @@
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent !important; color-scheme: light; }
+body { font-family: "Segoe UI", "Microsoft YaHei", sans-serif; }
+*, *::before, *::after { box-sizing: border-box; letter-spacing: 0; }
+.dshwv-root { -webkit-app-region: no-drag; }
+/* A native shaped window must not paint a full-window modal backdrop. */
+[class*="mask"] { background: transparent !important; backdrop-filter: none !important; }
+input, textarea, select { font: inherit; }
+.dragon-token-summary { border-bottom: 1px solid #dce0e9; padding-bottom: 10px; margin-bottom: 10px; }
+.dragon-token-summary h3 { font-size: 14px; margin: 0 0 6px; }
+.dragon-token-search { width: 100%; margin: 4px 0 8px; }
+.dragon-token-summary [hidden] { display: none !important; }
+.dragon-token-row { gap: 8px; align-items: start; }
+.dragon-token-row > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.dragon-token-row > span:last-child { flex-shrink: 0; }
+.dragon-turn-row { padding: 10px 0; border-bottom: 1px solid #dce0e9; min-width: 0; overflow-wrap: anywhere; }
+.dragon-turn-title { color: #415346; font-size: 12px; margin-bottom: 4px; }
+.dragon-turn-total { display: block; font-size: 13px; line-height: 1.6; color: #203170; }
+.dragon-turn-detail, .dragon-turn-ids { font-size: 11px; line-height: 1.7; color: #4b5266; }
+.dragon-turn-ids { user-select: text; }
+.dragon-station-summary { color: #35624c; }
+.dshwv-usage-card .dragon-token-summary .dshwv-usage-hint { color: #59647c; line-height: 1.55; }
+.dshwv-usage-card .dragon-token-summary .dragon-station-summary { color: #35624c; }
+.dragon-station-controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.dragon-station-controls button { cursor: pointer; padding: 6px 10px; border: 1px solid #ccd5dc; border-radius: 5px; background: #f5f8fa; color: #263238; font: inherit; }
+.dragon-station-controls button:disabled { opacity: .5; cursor: wait; }
+.dragon-station-receipts { margin: 8px 0; overflow-wrap: anywhere; }
+.dragon-station-receipts summary { cursor: pointer; }

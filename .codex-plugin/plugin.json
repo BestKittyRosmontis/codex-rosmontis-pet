@@ -1,0 +1,31 @@
+{
+  "name": "rosmontis-pet",
+  "version": "1.0.2",
+  "description": "Rosmontis fan-art companion with playful touch replies, Codex token history and optional station balance.",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "迷迭香余额挂件",
+    "shortDescription": "银灰发绿眼迷迭香、俏皮互动与 Codex 用量气泡",
+    "longDescription": "迷迭香原皮形象、48 条玩笑回复，插件加载时自动启动，保留窗口跟随、音效、用量统计与可授权余额功能。",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "显示迷迭香挂件",
+      "查看迷迭香余额与逐轮用量",
+      "检查迷迭香运行状态"
+    ],
+    "composerIcon": "./assets/rosmontis.png",
+    "logo": "./assets/rosmontis.png",
+    "brandColor": "#79B3A4"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "rosmontis",
+    "pet",
+    "balance"
+  ]
+}

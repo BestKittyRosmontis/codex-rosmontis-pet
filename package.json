@@ -1,0 +1,22 @@
+{
+  "name": "codex-rosmontis-pet",
+  "version": "1.0.2",
+  "description": "Partial Rosmontis fan-art adaptation of the community Codex Dragon Pet widget; original upstream credits retained.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "check": "node scripts/validate-package.mjs",
+    "build:windows": "node scripts/build-release.mjs"
+  },
+  "devDependencies": {
+    "electron": "44.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BestKittyRosmontis/codex-rosmontis-pet.git"
+  }
+}

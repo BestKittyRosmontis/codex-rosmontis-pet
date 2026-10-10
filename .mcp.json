@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "rosmontis": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/node_modules/electron/dist/electron.exe",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/runtime/dragon-mcp.mjs"
+      ],
+      "env": {
+        "ELECTRON_RUN_AS_NODE": "1"
+      }
+    }
+  }
+}
