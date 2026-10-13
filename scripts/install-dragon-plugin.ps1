@@ -146,6 +146,7 @@ try {
         Start-Sleep -Milliseconds 150
     }
     if (Test-Path -LiteralPath (Join-Path $data 'supervisor-state.json')) { throw 'Old pet is still stopping. Retry installation after it exits.' }
+    & (Join-Path $target 'scripts\update-dialogue.ps1') -DataDir $data
     & (Join-Path $target 'Autostart-Dragon.ps1') -NoLaunch
     & (Join-Path $target 'Start-Dragon.ps1')
     Write-WhaleReceipt $receiptPath @{ plugin=$selector; version=$manifest.version; target=$target; installedAt=[DateTime]::UtcNow.ToString('o') }

@@ -7,7 +7,7 @@
 | 底层挂件 | [MeteorNOX / DeepSeek-Balance-Whale-Widget](https://github.com/MeteorNOX/DeepSeek-Balance-Whale-Widget) | 保留大量 UI、交互、素材管理与账户/用量实现；当前 vendored 包标记为 0.3.17 |
 | Codex 适配 | 上游 For-Codex 分支，原说明署名 [Yang-huai406](https://github.com/Yang-huai406) 为适配协作者 | 沿用 Electron 透明窗口、Windows 跟随、日志与账单对接、安装结构等实现 |
 | 白紫 GPT 龙娘分享包 | [rattlesdike / codex-dragon-pet-share v1.0.0](https://github.com/rattlesdike/codex-dragon-pet-share/releases/tag/v1.0.0) | 作为本次直接修改基线；不将分享者的成果归为本仓库原创 |
-| 迷迭香局部改编 | [BestKittyRosmontis](https://github.com/BestKittyRosmontis) 维护，使用 Codex 辅助修改 | 替换角色图与 48 条互动台词，隔离插件名与数据目录，修复 PowerShell/MCP 自动启动，整理安装入口与发布包 |
+| 迷迭香局部改编 | [BestKittyRosmontis](https://github.com/BestKittyRosmontis) 维护，使用 Codex 辅助修改 | 替换角色图与 80 条互动台词，隔离插件名与数据目录，修复 PowerShell/MCP 自动启动，整理安装入口与发布包 |
 
 原说明中的 macOS 协作与感谢继续保留。本仓库的当前发布只验证 Windows，不将上游其他平台成果算作本次独立实现。
 

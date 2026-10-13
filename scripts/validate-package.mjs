@@ -12,8 +12,8 @@ const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
 assert.equal(pkg.version, manifest.version, 'Package and plugin versions agree');
 assert.equal(manifest.name, 'rosmontis-pet');
 const jokes = JSON.parse(fs.readFileSync(path.join(root, 'docs/dialogue.json'), 'utf8').replace(/^\uFEFF/, ''));
-assert.equal(jokes.length, 48);
-assert.equal(new Set(jokes).size, 48);
+assert.equal(jokes.length, 80);
+assert.equal(new Set(jokes).size, 80);
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'codex-rosmontis-check-'));
 const codexDir = path.join(temporary, 'empty-codex');
 fs.mkdirSync(codexDir);

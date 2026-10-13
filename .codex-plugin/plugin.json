@@ -1,6 +1,6 @@
 {
   "name": "rosmontis-pet",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Rosmontis fan-art companion with playful touch replies, Codex token history and optional station balance.",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
