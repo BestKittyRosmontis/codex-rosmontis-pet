@@ -1,6 +1,6 @@
 {
   "name": "codex-rosmontis-pet",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Partial Rosmontis fan-art adaptation of the community Codex Dragon Pet widget; original upstream credits retained.",
   "type": "module",
   "private": true,

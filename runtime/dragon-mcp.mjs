@@ -65,7 +65,7 @@ export async function dispatch(message) {
     if (method === 'initialize') {
       await ensurePetStartup();
       result = { protocolVersion: ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05'].includes(params.protocolVersion) ? params.protocolVersion : '2025-06-18',
-      capabilities: { tools: {} }, serverInfo: { name: 'rosmontis-pet', version: '1.0.2' } };
+      capabilities: { tools: {} }, serverInfo: { name: 'rosmontis-pet', version: '1.0.4' } };
     }
     else if (method === 'ping') result = {};
     else if (method === 'tools/list') result = { tools };

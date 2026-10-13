@@ -2,7 +2,7 @@ param([string]$CodexCli, [switch]$Interactive, [switch]$CheckOnly, [switch]$Unin
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'package-common.ps1')
 $source = Get-WhaleFullPath (Join-Path $PSScriptRoot '..')
-$base = Get-WhaleFullPath (Join-Path $env:LOCALAPPDATA 'CodexRosmontisPet')
+$base = Get-RosmontisInstallBase
 $data = Join-Path $env:USERPROFILE '.codex\rosmontis-pet'
 $receiptPath = Join-Path $base 'install-receipt.json'
 $marketName = 'rosmontis-pet-local'
@@ -61,6 +61,15 @@ try {
         if (!(Test-Path -LiteralPath $receiptPath)) { throw 'No dragon plugin installation receipt exists.' }
         $receipt = Get-Content -LiteralPath $receiptPath -Raw -Encoding UTF8 | ConvertFrom-Json
         $installedRoot = Get-WhaleFullPath $receipt.target
+        if (Test-Path -LiteralPath $installedRoot -PathType Container) {
+            Assert-WhalePlainPath $installedRoot
+            $installedRoot = Get-RosmontisPhysicalPath $installedRoot
+        } else {
+            $legacyBase = Get-WhaleFullPath (Join-Path $env:LOCALAPPDATA 'CodexRosmontisPet')
+            if ($installedRoot.StartsWith($legacyBase + '\releases\', [StringComparison]::OrdinalIgnoreCase)) {
+                $installedRoot = Get-WhaleFullPath (Join-Path $base $installedRoot.Substring($legacyBase.Length + 1))
+            }
+        }
         if ($receipt.plugin -cne $selector -or !$installedRoot.StartsWith($base + '\releases\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Installation receipt does not belong to this plugin.' }
         Assert-WhalePlainPath $installedRoot
         if ($CheckOnly) { Notice 'Uninstall validation passed.'; return }
@@ -95,6 +104,16 @@ try {
     }
     Assert-InstallSpace $target $packageBytes
     if ($CheckOnly) { @{ok=$true; plugin=$selector; version=$manifest.version; target=$target; cli=$cli} | ConvertTo-Json; return }
+    # A packaged Codex process can redirect AppData writes. Persist the real
+    # filesystem path so Explorer, login startup and scheduled tasks can use it.
+    if (!(Test-Path -LiteralPath $base -PathType Container)) { [void][IO.Directory]::CreateDirectory($base) }
+    Assert-WhalePlainPath $base
+    $base = Get-RosmontisPhysicalPath $base
+    $receiptPath = Join-Path $base 'install-receipt.json'
+    $marketFile = Join-Path $base '.agents\plugins\marketplace.json'
+    $target = Get-WhaleFullPath (Join-Path $base ('releases\' + $manifest.version + '-' + $fingerprint))
+    if (!$target.StartsWith($base + '\releases\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Invalid physical release destination.' }
+    Assert-WhalePlainPath $target
     if (!(Test-Path -LiteralPath $target)) {
         $stage = $target + '.stage-' + [Guid]::NewGuid().ToString('N')
         Copy-WhaleTree $source $stage @('.git','output')

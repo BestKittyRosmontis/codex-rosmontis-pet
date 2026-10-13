@@ -1,8 +1,10 @@
 param([switch]$Stop, [string]$CodexPath)
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'runtime\windows-paths.ps1')
+$root = Get-RosmontisPhysicalPath $PSScriptRoot
 Remove-Item Env:\ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue
 $data = Join-Path $env:USERPROFILE '.codex\rosmontis-pet'
-$supervisor = Join-Path $PSScriptRoot 'desktop\supervisor.ps1'
+$supervisor = Join-Path $root 'desktop\supervisor.ps1'
 if ($Stop) {
     & $supervisor -DataDir $data -Stop
     return
@@ -15,7 +17,7 @@ if (Test-Path -LiteralPath $configFile) {
 }
 if (!$CodexPath -and $config.codexPath -and (Test-Path -LiteralPath $config.codexPath)) { $CodexPath = $config.codexPath }
 if (!$CodexPath) {
-    $localCodex = Join-Path (Split-Path $PSScriptRoot) 'codex-local-26.928.3736.0\app\ChatGPT.exe'
+    $localCodex = Join-Path (Split-Path $root) 'codex-local-26.928.3736.0\app\ChatGPT.exe'
     if (Test-Path -LiteralPath $localCodex) { $CodexPath = $localCodex }
 }
 if ($CodexPath) {
@@ -29,14 +31,14 @@ if ($CodexPath) {
     $config.Remove('codexPath')
     Remove-Item Env:\DRAGON_CODEX_PATH,Env:\DRAGON_CODEX_WINDOW -ErrorAction SilentlyContinue
 }
-$electron = Join-Path $PSScriptRoot 'node_modules\electron\dist\electron.exe'
+$electron = Join-Path $root 'node_modules\electron\dist\electron.exe'
 if (!(Test-Path -LiteralPath $electron)) { throw 'Electron is missing. Run npm ci in this folder first.' }
-if (!(Test-Path -LiteralPath (Join-Path $PSScriptRoot 'assets\rosmontis.png'))) { throw 'The generated dragon sprite is not ready yet.' }
+if (!(Test-Path -LiteralPath (Join-Path $root 'assets\rosmontis.png'))) { throw 'The generated dragon sprite is not ready yet.' }
 [void][IO.Directory]::CreateDirectory($data)
 $config.enabled = $true
 $config.mode = 'follow-codex'
 $config.electronPath = $electron
-$config.pluginRoot = $PSScriptRoot
+$config.pluginRoot = $root
 $config | ConvertTo-Json | Set-Content -LiteralPath $configFile -Encoding UTF8
 $pause = Join-Path $data 'pause-until-host-exit.json'
 if (Test-Path -LiteralPath $pause) { Remove-Item -LiteralPath $pause }

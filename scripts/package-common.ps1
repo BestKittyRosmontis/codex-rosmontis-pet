@@ -1,4 +1,5 @@
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot '..\runtime\windows-paths.ps1')
 function Get-WhaleFullPath([string]$Path) { return [IO.Path]::GetFullPath($Path).TrimEnd('\') }
 function Assert-WhalePlainPath([string]$Path) {
     $cursor = Get-WhaleFullPath $Path
@@ -97,4 +98,26 @@ function Stop-WhaleExistingTask($Task, [string]$DataDir, [string]$Target) {
         Start-Sleep -Milliseconds 100
     }
     throw 'The existing supervisor did not stop; plugin files were not replaced.'
+}
+
+function Get-RosmontisInstallBase {
+    $defaultBase = Get-WhaleFullPath (Join-Path $env:LOCALAPPDATA 'CodexRosmontisPet')
+    Assert-WhalePlainPath $defaultBase
+    if (Test-Path -LiteralPath $defaultBase -PathType Container) { return (Get-RosmontisPhysicalPath $defaultBase) }
+    $candidates = @()
+    if (Get-Command Get-AppxPackage -ErrorAction SilentlyContinue) {
+        foreach ($package in @(Get-AppxPackage -Name 'OpenAI.Codex*' -ErrorAction SilentlyContinue)) {
+            if ($package.PackageFamilyName -notmatch '^[A-Za-z0-9._-]+$') { continue }
+            $candidate = Join-Path $env:LOCALAPPDATA ('Packages\' + $package.PackageFamilyName + '\LocalCache\Local\CodexRosmontisPet')
+            $receipt = Join-Path $candidate 'install-receipt.json'
+            if (!(Test-Path -LiteralPath $receipt -PathType Leaf)) { continue }
+            Assert-WhalePlainPath $candidate
+            $value = Get-Content -LiteralPath $receipt -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ($value.plugin -ceq 'rosmontis-pet@rosmontis-pet-local') { $candidates += Get-RosmontisPhysicalPath $candidate }
+        }
+    }
+    $candidates = @($candidates | Sort-Object -Unique)
+    if ($candidates.Count -gt 1) { throw 'Multiple Rosmontis installations found. Use the intended installed release.' }
+    if ($candidates.Count -eq 1) { return $candidates[0] }
+    return $defaultBase
 }

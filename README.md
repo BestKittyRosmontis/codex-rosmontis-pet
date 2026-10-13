@@ -11,14 +11,14 @@
 - 将默认白紫 GPT 龙娘换为迷迭香同人形象：银灰发、绿眼、猫耳、深蓝与青绿色服装，整理头发并去掉耳机。图片经过 AI 生成与修改，属于非官方同人改编。
 - 替换为 48 条短互动台词，包含俏皮吐槽、轻微嘴欠和对 AI 编答案的自嘲；台词是玩笑，不是事实说明，也不是原作官方台词。可在 [docs/dialogue.json](docs/dialogue.json) 查看。
 - 改为独立的 `rosmontis-pet` 插件与数据目录，更新名称、图标和托盘文字。
-- 修复 Windows 启动：插件的 MCP 服务加载时启动或复用挂件，并使用 PowerShell，避免系统缺少 VBS 引擎时无法启动。新增 `.cmd` 安装与启停入口。
+- 修复 Windows 启动：插件的 MCP 服务加载时启动或复用挂件，并使用 PowerShell，避免系统缺少 VBS 引擎时无法启动。新增 `.cmd` 安装与启停入口。1.0.4 还修正了商店版 Codex 的路径隔离，并同步已有挂件启动任务到新版，避免登录后找不到启动文件或启动旧图。
 
 窗口跟随、按压动画、音效、资源编辑、用量记录、可授权的站点余额等主要能力继续使用上游实现。没有重新编写整个挂件框架。
 
 ## 安装与使用（Windows x64）
 
 1. 安装支持本地插件的 Codex 桌面应用。
-2. 从 [Releases](https://github.com/BestKittyRosmontis/codex-rosmontis-pet/releases/latest) 下载 `Codex-Rosmontis-Pet-1.0.2-Windows.zip`，完整解压到一个固定位置。
+2. 从 [Releases](https://github.com/BestKittyRosmontis/codex-rosmontis-pet/releases/latest) 下载当前版本的 Windows 完整安装 ZIP，完整解压到一个固定位置。
 3. 双击 **`Install.cmd`**。安装器会校验文件、注册并启用本地插件，随后启动挂件。无需管理员权限，发布包已经包含 Electron。
 4. 在 Codex 中新开一个会话让插件加载。以后从普通 Codex 入口使用即可；挂件跟随 Codex 窗口，关闭窗口后隐藏。安装器还会注册当前用户登录启动项，让守护进程等待 Codex。
 
@@ -30,7 +30,7 @@
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\install-dragon-plugin.ps1
 ```
 
-安装后的程序位于 `%LOCALAPPDATA%\CodexRosmontisPet`，挂件配置位于 `%USERPROFILE%\.codex\rosmontis-pet`。卸载保留个人配置与历史；这些内容不在分享包中。余额查询需要每位使用者自行配置或授权自己的账户。Token 来自本机可读取的 Codex 记录；估算费用不等于站点实际扣费，缺少数据时不会据此保证余额准确。
+安装器将程序放在当前用户的本地应用数据目录。商店版 Codex 可能将该目录重定向到 `%LOCALAPPDATA%\Packages\OpenAI.Codex_*\LocalCache\Local\CodexRosmontisPet`；安装回执的 `target` 字段记录实际位置。挂件配置位于 `%USERPROFILE%\.codex\rosmontis-pet`。卸载保留个人配置与历史；这些内容不在分享包中。余额查询需要每位使用者自行配置或授权自己的账户。Token 来自本机可读取的 Codex 记录；估算费用不等于站点实际扣费，缺少数据时不会据此保证余额准确。
 
 ## 从源码构建
 
@@ -49,3 +49,15 @@ npm run build:windows
 保留上游 [MIT LICENSE](LICENSE) 和署名。代码许可不自动覆盖角色图片、动图、音效等素材；本仓库不授予额外素材权利。迷迭香为《明日方舟》角色，本仓库不是相关权利方或 OpenAI 的官方项目。
 
 当前发布针对 Windows x64。本次验证包括图片路由、角色名称、48 条台词，以及实际安装后的可见性、无需调用显示工具的 MCP 初始化启动与守护进程复用。未验证 macOS / Linux，也没有重跑上游所有功能测试。Codex 窗口或日志格式更新后可能需要适配。
+
+## 1.0.4 更新
+
+采用已确认的 v5 形象，修正头发、正面衣服方向、银灰印花内搭和细交叉带；保持互动与用量功能。启动路径使用文件的实际位置，普通 Windows 启动环境也能访问。已有属于本挂件的旧计划任务会同步到当前版本；新安装仍使用当前用户启动项与 MCP 加载启动。
+
+可在已安装并启用挂件的 Windows 账户中运行下面的检查。它临时注册一个当前用户测试任务，检查结束后移除该测试任务：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-windows-startup.ps1
+```
+
+DeepSeek 官方余额查询由上游内置功能提供，每位使用者需要通过挂件的 API 设置自行保存自己的密钥。本仓库和安装包不包含个人账户配置。
